@@ -9,10 +9,10 @@ import {
   ListItem,
   Typography,
 } from "@mui/material";
-import SearchOutlined from "@mui/icons-material/SearchOutlined";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 
 const HackerNewsSearch = () => {
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(localStorage.getItem("searchQuery") || "");
   const [results, setResults] = useState([]);
 
   useEffect(() => {
@@ -29,8 +29,9 @@ const HackerNewsSearch = () => {
 
     if (query.trim() !== "") {
       fetchData();
+      localStorage.setItem("searchQuery", query);
     } else {
-      setResults([]); // Clear results if the query is empty
+      setResults([]);
     }
   }, [query]);
 
@@ -41,18 +42,10 @@ const HackerNewsSearch = () => {
   return (
     <Paper
       elevation={3}
-      style={{
-        maxWidth: "800px",
-        minHeight: "615px",
-        margin: "0 auto",
-        padding: "20px",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center", // Center horizontally
-      }}
+      style={{ maxWidth: "800px", margin: "0 auto", padding: "20px" }}
     >
-      <Typography variant="h4" style={{ marginBottom: "20px" }}>
-        Hacker News Search
+      <Typography variant="h5" style={{ marginBottom: "20px" }}>
+        Search the news
       </Typography>
       <InputBase
         fullWidth
@@ -62,10 +55,12 @@ const HackerNewsSearch = () => {
         style={{
           fontSize: "16px",
           marginBottom: "20px",
+          border: "1px solid #ccc", // Add border
+          padding: "10px",
         }}
         startAdornment={
-          <InputAdornment position="start" color="black">
-            <SearchOutlined />
+          <InputAdornment position="start">
+            <SearchOutlinedIcon />
           </InputAdornment>
         }
       />

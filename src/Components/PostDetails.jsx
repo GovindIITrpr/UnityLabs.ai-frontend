@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Typography, Paper, Divider, List, ListItem } from "@mui/material";
-import { renderToString } from "react-dom/server";
 
 const PostDetail = () => {
   const { objectID } = useParams();
@@ -26,15 +25,17 @@ const PostDetail = () => {
     }
   }, [objectID]);
 
-  const formatCommentText = (text) => {
-    // Use dangerouslySetInnerHTML to render HTML entities
-    return { __html: renderToString(<div>{text}</div>) };
+  const formatCommentText = (htmlString) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlString, "text/html");
+    const sanitizedHTML = doc.body.innerHTML;
+    return { __html: sanitizedHTML };
   };
 
   return (
     <Paper
       elevation={3}
-      style={{ maxWidth: "1000px", margin: "0 auto", padding: "20px" }}
+      style={{ maxWidth: "800px", margin: "0 auto", padding: "20px" }}
     >
       {postDetails ? (
         <>
